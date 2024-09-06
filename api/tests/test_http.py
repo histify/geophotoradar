@@ -1,6 +1,8 @@
+from io import BytesIO
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 
+from app.settings import settings
 from tests.case import TestCase
 
 
@@ -57,11 +59,23 @@ class TestHTTP(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assert_json_equal([seeblick], response.json())
 
+    def test_data_import_endpoint_is_protected(self):
+        response = self.client.post(
+            "/api/import/",
+            files={"file": ("foo.csv", BytesIO(), "text/csv")},
+        )
+        self.assertEqual(403, response.status_code)
+        self.assertEqual({"detail": "Not authenticated"}, response.json())
+
     def test_data_import(self):
         with NamedTemporaryFile(suffix=".csv") as fio:
             fio.write(b"title")
             fio.flush()
             fio.seek(0)
-            response = self.client.post("/api/import/", files={"file": (Path(fio.name).name, fio, "text/csv")})
+            response = self.client.post(
+                "/api/import/",
+                files={"file": (Path(fio.name).name, fio, "text/csv")},
+                headers={"Authorization": f"Bearer {settings.api_import_token}"},
+            )
             self.assertEqual(200, response.status_code, response.content)
             self.assertEqual(Path(fio.name).name, response.json())
