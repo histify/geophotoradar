@@ -2,6 +2,10 @@ from tests.case import TestCase
 
 
 class TestHealthEndpoint(TestCase):
+    def test_root_redirects_to_docs(self):
+        response = self.client.get("/api", follow_redirects=False)
+        self.assertEqual(response.status_code, 307)
+        self.assertEqual("/api/docs", response.headers.get("location"))
 
     def test_health(self):
         response = self.client.get("/api/health")
