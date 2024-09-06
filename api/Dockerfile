@@ -36,7 +36,7 @@ RUN --mount=type=cache,id=test,target=/root/.cache \
 COPY pyproject.toml .flake8 /app/
 COPY app/ /app/app/
 COPY tests/ /app/tests/
-ENV ENVIRONMENT=Testing
+ENV ENVIRONMENT=TestingDocker
 USER app
 
 

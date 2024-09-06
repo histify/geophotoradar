@@ -26,6 +26,8 @@ jobs:
       # Build the images with BUILDKIT_INLINE_CACHE=1, so that we can
       # reuse layers in a later step. This works in combination with
       # cache_from (in the compose file), thus we do not need to pull here.
+      - name: start elasticsearch
+        run: $COMPOSE up -d elasticsearch
       - name: build images
         run: $COMPOSE build --build-arg BUILDKIT_INLINE_CACHE=1
       - name: push cache
@@ -42,6 +44,8 @@ jobs:
         if: always()
 
       # Run tests
+      - name: wait a bit for elasticsearch to start
+        run: sleep 5
       - name: pytest
         run: $COMPOSE run --rm api pytest
 

@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -euo pipefail
+cd "$(dirname "$0")/../.."
+
+docker-compose -f compose-test.yaml up -d elasticsearch
+docker-compose -f compose-test.yaml build api
+docker-compose -f compose-test.yaml run --rm api flake8
+docker-compose -f compose-test.yaml run --rm api isort --check-only --quiet --settings pyproject.toml .
+docker-compose -f compose-test.yaml run --rm api black --check .
+sleep 5  # wait for elasticsearch
+docker-compose -f compose-test.yaml run --rm api pytest
+docker-compose -f compose-test.yaml rm -fs api
