@@ -23,6 +23,7 @@ RUN --mount=type=cache,id=builder-pip,target=/root/.cache \
 FROM builder AS dev
 USER app
 ENV ENVIRONMENT=Development
+CMD ["uvicorn", "--app-dir", "/app/", "app.server:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
 
 FROM builder AS test
 COPY --from=poetry /app/requirements.txt /app/requirements-test.txt /app/requirements-lint.txt /app/
@@ -36,7 +37,6 @@ COPY app/ /app/app/
 COPY tests/ /app/tests/
 ENV ENVIRONMENT=Testing
 USER app
-CMD ["uvicorn", "--app-dir", "/app/", "app.server:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
 
 
 FROM builder AS prod
