@@ -36,9 +36,11 @@ COPY app/ /app/app/
 COPY tests/ /app/tests/
 ENV ENVIRONMENT=Testing
 USER app
+CMD ["uvicorn", "--app-dir", "/app/", "app.server:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
 
 
 FROM builder AS prod
 COPY app/ /app/app/
 ENV ENVIRONMENT=Production
 USER app
+CMD ["uvicorn", "--app-dir", "/app/", "app.server:app", "--host", "0.0.0.0", "--port", "8000"]
