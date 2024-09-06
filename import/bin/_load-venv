@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+upfind () {
+    if [ "$(realpath `dirname $1`)" == "/" ]; then
+        echo "ERROR: no $(basename $1) found in any parent directory."
+        exit 1
+    fi
+    ls -d $1 2>/dev/null || upfind ../$1
+}
+
+if [ "${DISABLE_PROJECT_VENV_AUTO_CREATION:-}" == "" ]; then
+    if [ ! -x ./venv/bin/python ]; then
+        if hash pyenv 2>/dev/null; then
+            pyenv exec python -m venv venv
+        else
+            pythonVersion=$(cat $(upfind .python-version))
+            pythonExecutable=python$pythonVersion
+            if ! hash $pythonExecutable 2>/dev/null; then
+                echo "ERROR: missing pyenv or $pythonExecutable"
+                exit 1
+            fi
+            $pythonExecutable -m venv venv
+        fi
+        ./venv/bin/pip install -U pip
+    fi
+    source ./venv/bin/activate
+fi
