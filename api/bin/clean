@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -euo pipefail
+cd "$(dirname "$0")/.."
+. bin/_load-venv
+
+isort app
+black app
+flake8 app
