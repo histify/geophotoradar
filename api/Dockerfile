@@ -25,6 +25,7 @@ USER app
 ENV ENVIRONMENT=Development
 CMD ["uvicorn", "--app-dir", "/app/", "app.server:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
 
+
 FROM builder AS test
 COPY --from=poetry /app/requirements.txt /app/requirements-test.txt /app/requirements-lint.txt /app/
 RUN --mount=type=cache,id=test,target=/root/.cache \
