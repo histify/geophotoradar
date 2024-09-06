@@ -1,0 +1,32 @@
+{
+  "folders": [
+    {
+      "name": "api",
+      "path": "api"
+    },
+    {
+      "name": "db",
+      "path": "db"
+    },
+    {
+      "name": "frontend",
+      "path": "frontend"
+    },
+    {
+      "name": "import",
+      "path": "import"
+    },
+    {
+      "name": "root",
+      "path": "."
+    },
+  ],
+  "settings": {
+    "files.exclude": {
+      "api": true,
+      "db": true,
+      "frontend": true,
+      "import": true,
+    }
+  }
+}
