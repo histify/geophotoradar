@@ -6,8 +6,8 @@ services:
     ports:
       - 8000:8000
 
-  frontend:
-    build: ./frontend/Dockerfile
+  # frontend:
+  #   build: ./frontend/Dockerfile
 
   #import:
   #  build: ./import/Dockerfile
