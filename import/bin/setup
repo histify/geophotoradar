@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-set -euo pipefail
-cd "$(dirname "$0")/.."
-. bin/_load-venv
-
-pip install -U pip
-pip install poetry
-poetry install
