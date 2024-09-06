@@ -1,16 +1,16 @@
 services:
-#  api:
-#    build:
-#      context: api
-#      target: dev
-#    ports:
-#      - 8000:8000
+  api:
+    build:
+      context: api
+      target: dev
+    ports:
+      - 8000:8000
 
-  #  frontend:
-  #    build: ./frontend/Dockerfile
-  #
-  #  import:
-  #    build: ./import/Dockerfile
+  frontend:
+    build: ./frontend/Dockerfile
+
+  #import:
+  #  build: ./import/Dockerfile
 
 
   es01:
