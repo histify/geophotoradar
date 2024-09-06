@@ -27,6 +27,6 @@ async def health():
 
 
 @app.get("/api/photos")
-async def photos(latitude: float = Query(...), longitude: float = Query(...), radius: float = Query(...)):
+async def photos(longitude: float = Query(...), latitude: float = Query(...), radius: float = Query(...)):
     """The photos endpoint queries the database for fotos in a specific radious of a location."""
-    return Elastic().search_documents(latitude=latitude, longitude=longitude, radius=f"{radius}m")
+    return Elastic().search_documents(longitude=longitude, latitude=latitude, radius=f"{radius}m")

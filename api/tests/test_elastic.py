@@ -9,7 +9,7 @@ class TestElastic(TestCase):
         self.assertTrue(self.elastic.connection.indices.exists(index=settings.elastic_index))
 
     def test_index_and_query_document(self):
-        self.assertEqual([], self.elastic.search_documents(48.1285358227, 11.5751872644, "1km"))
+        self.assertEqual([], self.elastic.search_documents(11.5751872644, 48.1285358227, "1km"))
         self.elastic.index(
             {
                 "title": "Fraunhofer Apotheke",
@@ -22,5 +22,5 @@ class TestElastic(TestCase):
         )
         self.assertEqual(
             ["Fraunhofer Apotheke"],
-            list(map(itemgetter("title"), self.elastic.search_documents(48.1285358227, 11.5751872644, "1km"))),
+            list(map(itemgetter("title"), self.elastic.search_documents(11.5751872644, 48.1285358227, "1km"))),
         )

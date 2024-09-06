@@ -35,8 +35,8 @@ class TestHTTP(TestCase):
         response = self.client.get(
             "/api/photos",
             params={
-                "latitude": 47.16136672113505,
                 "longitude": 8.513045174201151,
+                "latitude": 47.16136672113505,
                 "radius": 1000000,
             },
         )
@@ -46,8 +46,8 @@ class TestHTTP(TestCase):
         response = self.client.get(
             "/api/photos",
             params={
-                "latitude": 47.16136672113505,
                 "longitude": 8.513045174201151,
+                "latitude": 47.16136672113505,
                 "radius": 10,
             },
         )

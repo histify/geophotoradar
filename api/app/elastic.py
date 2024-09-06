@@ -18,13 +18,13 @@ class Elastic:
             basic_auth=(settings.elastic_user, settings.elastic_password),
         )
 
-    def search_documents(self, latitude: float, longitude: float, radius: str) -> list[dict]:
+    def search_documents(self, longitude: float, latitude: float, radius: str) -> list[dict]:
         """Search for documents in the index, returning only a list of documents as dicts"""
         response = self.search(
             {
                 "bool": {
                     "must": {"match_all": {}},
-                    "filter": {"geo_distance": {"distance": radius, "coordinates": {"lat": latitude, "lon": longitude}}},
+                    "filter": {"geo_distance": {"distance": radius, "coordinates": {"lon": longitude, "lat": latitude}}},
                 }
             }
         )
