@@ -1,18 +1,13 @@
 from elasticsearch import Elasticsearch, helpers
 import configparser
 
+
+
+
 config = configparser.ConfigParser()
 config.read('config.ini')
 
-es = Elasticsearch(
-    cloud_id=config['ELASTIC']['cloud_id'],
-    http_auth=(config['ELASTIC']['user'], config['ELASTIC']['password'])
-)
-
-es = Elasticsearch(
-    cloud_id=config['ELASTIC']['cloud_id'],
-    http_auth=(config['ELASTIC']['user'], config['ELASTIC']['password'])
-)
+es = Elasticsearch("http://localhost:9201/")
 
 es.info()
 
@@ -51,18 +46,32 @@ es.info()
 #     }
 #  }
 
+index='geophotoradar'
+body = {
+            "mappings": {
+                "properties": {
+                      "coordinates": {
+                        "type": "geo_point"
+                      }
+                    }
+            }
+        }
 
+es.indices.delete(index=index, ignore=[400, 404])
+
+es.indices.create(index=index, body=body)
 
 
 es.index(
- index='geophotoradar',
+ index=index,
  document={
-  {
       "title": "Der Überschwemmte Rathausquai der Stadt Luzern",
       "image_url": "https://zentralgut.ch/content/BibZug_TD_23_01990/800/0/TD_23_01990.jpg",
       "id": "BibZug_TD_23_01990",
-      "coordinates": "47.0519806883, 8.30707289986",
+      "coordinates": {
+          "type": "Point",
+          "coordinates": [8.30707289986, 47.0519806883]
+      },
       "zentralgut_url": "https://n2t.net/ark:/63274/bz1rb4r",
       "iiif_url": "https://zentralgut.ch/api/v1/records/BibZug_TD_23_01990/files/images/TD_23_01990.jpg"
-    }
  })
