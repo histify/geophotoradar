@@ -1,3 +1,6 @@
+from pathlib import Path
+from tempfile import NamedTemporaryFile
+
 from tests.case import TestCase
 
 
@@ -53,3 +56,12 @@ class TestHTTP(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assert_json_equal([seeblick], response.json())
+
+    def test_data_import(self):
+        with NamedTemporaryFile(suffix=".csv") as fio:
+            fio.write(b"title")
+            fio.flush()
+            fio.seek(0)
+            response = self.client.post("/api/import/", files={"file": (Path(fio.name).name, fio, "text/csv")})
+            self.assertEqual(200, response.status_code, response.content)
+            self.assertEqual(Path(fio.name).name, response.json())
