@@ -1,0 +1,6 @@
+name: geophotoradar-test
+services:
+  api:
+    build:
+      context: api
+      target: test
