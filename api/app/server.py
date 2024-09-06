@@ -1,5 +1,3 @@
-from operator import itemgetter
-
 from fastapi import FastAPI
 from fastapi import Query
 from fastapi.responses import RedirectResponse
@@ -31,13 +29,4 @@ async def health():
 @app.get("/api/photos")
 async def photos(latitude: float = Query(...), longitude: float = Query(...), radius: float = Query(...)):
     """The photos endpoint queries the database for fotos in a specific radious of a location."""
-    query = {
-        "bool": {
-            "must": {"match_all": {}},
-            "filter": {"geo_distance": {"distance": f"{radius}m", "coordinates": {"lat": latitude, "lon": longitude}}},
-        }
-    }
-    response = Elastic().search(query=query)
-    hits = response["hits"]["hits"]
-    documents = list(map(itemgetter("_source"), hits))
-    return documents
+    return Elastic().search_documents(latitude=latitude, longitude=longitude, radius=f"{radius}m")

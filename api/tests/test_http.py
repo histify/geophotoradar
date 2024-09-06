@@ -1,7 +1,7 @@
 from tests.case import TestCase
 
 
-class TestHealthEndpoint(TestCase):
+class TestHTTP(TestCase):
     def test_root_redirects_to_docs(self):
         response = self.client.get("/api", follow_redirects=False)
         self.assertEqual(response.status_code, 307)
