@@ -20,6 +20,10 @@ if "pytest" not in sys.modules:
 
 class Settings(BaseSettings):
     fastapi_debug: bool = False
+    elastic_url: str = None
+    elastic_user: str = "elastic"
+    elastic_password: str = None
+    elastic_index: str = "geophotoradar"
 
 
 class ProductionSettings(Settings):
@@ -28,10 +32,20 @@ class ProductionSettings(Settings):
 
 class DevelopmentSettings(Settings):
     fastapi_debug: bool = True
+    elastic_url: str = "http://es01:9200"
+    elastic_password: str = "geophotoradar"
 
 
 class TestingSettings(Settings):
-    pass
+    elastic_url: str = "http://localhost:9201"
+    elastic_password: str = "geophotoradar"
+    elastic_index: str = "testing"
+
+
+class TestingDockerSettings(Settings):
+    elastic_url: str = "http://elasticsearch:9200"
+    elastic_password: str = "geophotoradar"
+    elastic_index: str = "testing"
 
 
 settings: Settings = globals()[os.environ.get("ENVIRONMENT", "Testing") + "Settings"]()
