@@ -5,6 +5,8 @@ services:
       target: dev
     ports:
       - 8000:8000
+    volumes:
+      - ./api/app/:/app/app/
 
   # frontend:
   #   build: ./frontend/Dockerfile
