@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "import"
+version = "0.1.0"
+description = ""
+authors = ["Lionel Walter <lionel.walter@arbim.ch>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+elasticsearch = "^8.15.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
