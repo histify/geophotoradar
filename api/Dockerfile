@@ -22,6 +22,7 @@ RUN --mount=type=cache,id=builder-pip,target=/root/.cache \
 
 FROM builder AS dev
 USER app
+ENV ENVIRONMENT=Development
 
 FROM builder AS test
 COPY --from=poetry /app/requirements.txt /app/requirements-test.txt /app/requirements-lint.txt /app/
@@ -33,9 +34,11 @@ RUN --mount=type=cache,id=test,target=/root/.cache \
 COPY pyproject.toml .flake8 /app/
 COPY app/ /app/app/
 COPY tests/ /app/tests/
+ENV ENVIRONMENT=Testing
 USER app
 
 
 FROM builder AS prod
 COPY app/ /app/app/
+ENV ENVIRONMENT=Production
 USER app
