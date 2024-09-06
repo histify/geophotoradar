@@ -1,11 +1,8 @@
+import time
+
 from elasticsearch import Elasticsearch, helpers
 import configparser
 
-
-
-
-config = configparser.ConfigParser()
-config.read('config.ini')
 
 es = Elasticsearch("http://localhost:9201/")
 
@@ -46,7 +43,7 @@ es.info()
 #     }
 #  }
 
-index='geophotoradar'
+index="geophotoradar"
 body = {
             "mappings": {
                 "properties": {
@@ -75,3 +72,30 @@ es.index(
       "zentralgut_url": "https://n2t.net/ark:/63274/bz1rb4r",
       "iiif_url": "https://zentralgut.ch/api/v1/records/BibZug_TD_23_01990/files/images/TD_23_01990.jpg"
  })
+
+time.sleep(2)
+
+
+
+query = {
+    "bool": {
+      "must": {
+        "match_all": {}
+      },
+      "filter": {
+        "geo_distance": {
+          "distance": "20km",
+          "coordinates": {
+            "lat": 47.0,
+            "lon": 8.3
+          }
+        }
+      }
+    }
+  }
+
+#Perform the search request
+response = es.search(index=index, query=query)
+
+resp = es.search(index=index)
+print(resp)
