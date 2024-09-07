@@ -29,14 +29,14 @@ class Elastic:
                     "must": {"match_all": {}},
                     "filter": {"geo_distance": {"distance": radius, "coordinates": {"lon": longitude, "lat": latitude}}},
                 }
-            }
+            },
         )
         hits = response["hits"]["hits"]
         return list(map(itemgetter("_source"), hits))
 
     def search(self, query: dict) -> ObjectApiResponse:
         """Search for documents in the index, returning the elastic search response."""
-        return self.connection.search(index=self.index_name, query=query)
+        return self.connection.search(index=self.index_name, query=query, size=1000)
 
     def index(self, document: dict) -> None:
         """Add a document to the elasticsearch index."""
