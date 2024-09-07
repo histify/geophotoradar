@@ -56,7 +56,7 @@ async def import_data(file: UploadFile = File(...), token: HTTPAuthorizationCred
     content = await file.read()
 
     # Decode the content and use StringIO to emulate a file-like object
-    csv_content = content.decode('utf-8')
+    csv_content = content.decode("utf-8")
     csv_reader = csv.DictReader(StringIO(csv_content))
 
     importer = Importer()
