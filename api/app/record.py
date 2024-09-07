@@ -16,3 +16,17 @@ class Record:
         self.lon = lon
         self.iiif_url = iiif_url
         self.source_system_url = source_system_url
+
+    def record_to_dict(self) -> dict:
+        """Convert a Record object to a dictionary suitable for Elasticsearch indexing."""
+        return {
+            "id": self.id,
+            "title": self.title,
+            "image_url": self.image_url,
+            "location": {
+                "lat": self.lat,
+                "lon": self.lon
+            },
+            "iiif_url": self.iiif_url,
+            "source_system_url": self.source_system_url,
+        }

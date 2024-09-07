@@ -1,8 +1,11 @@
 from operator import itemgetter
+from typing import List
 
 from elastic_transport import ObjectApiResponse
 from elasticsearch import Elasticsearch
+from elasticsearch.helpers import streaming_bulk
 
+from app.record import Record
 from app.settings import settings
 
 
@@ -55,3 +58,21 @@ class Elastic:
                     }
                 },
             )
+    def import_records(self, records: List[Record]) -> str:
+        success, failed = 0, 0
+        for ok, action in streaming_bulk(
+                client=self.connection, index=self.index_name, actions=self.generate_actions(records),
+        ):
+            if ok:
+                success += 1
+            else:
+                failed += 1
+        return(f"Finished: {success} documents indexed, {failed} failed.")
+
+    def generate_actions(self, records: List[Record]):
+        """This function is passed into the bulk()
+        helper to create many documents in sequence.
+        """
+        for record in records:
+            doc = record.record_to_dict()
+            yield doc

@@ -1,3 +1,6 @@
+import csv
+from io import StringIO
+
 from fastapi import Depends
 from fastapi import FastAPI
 from fastapi import File
@@ -10,6 +13,7 @@ from fastapi.security import HTTPAuthorizationCredentials
 from fastapi.security import HTTPBearer
 
 from app.elastic import Elastic
+from app.importer import Importer
 from app.settings import settings
 
 
@@ -49,4 +53,16 @@ async def photos(longitude: float = Query(...), latitude: float = Query(...), ra
 
 @app.post("/api/import")
 async def import_data(file: UploadFile = File(...), token: HTTPAuthorizationCredentials = Depends(verify_token)):
-    return file.filename
+    content = await file.read()
+
+    # Decode the content and use StringIO to emulate a file-like object
+    csv_content = content.decode('utf-8')
+    csv_reader = csv.DictReader(StringIO(csv_content))
+
+    importer = Importer()
+    records = importer.read_csv_to_records(csv_reader)
+    message = Elastic().import_records(records)
+    return {
+        "status": "ok",
+        "message": message,
+    }
