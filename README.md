@@ -61,3 +61,10 @@ You can start the development environment within docker containers:
 - run `docker compose build`
 - run `docker compose up -d`
 - visit http://localhost:8000
+
+
+## Contributions and license
+
+The project is license with GPLv3.
+
+Feel free to use it, modify it, fork it, contribute back.
