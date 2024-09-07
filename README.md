@@ -32,5 +32,3 @@ sudo chgrp 0 esdata01
 sudo chgrp 0 esdata02
 sudo chgrp 0 kibanadata
 ```
-
-Go to kibana : 
