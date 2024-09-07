@@ -9,7 +9,7 @@ jobs:
   build:
     strategy:
       matrix:
-        service: [api]
+        service: [api, frontend]
     name: build ${{ matrix.service }}
     runs-on: ubuntu-latest
     steps:
