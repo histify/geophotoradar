@@ -25,18 +25,46 @@ class Elastic:
         """Search for documents in the index, returning only a list of documents as dicts"""
         response = self.search(
             {
-                "bool": {
-                    "must": {"match_all": {}},
-                    "filter": {"geo_distance": {"distance": radius, "coordinates": {"lon": longitude, "lat": latitude}}},
-                }
-            },
+                "size": 1000,
+                "query": {
+                    "bool": {
+                        "must": {
+                            "match_all": {}
+                        },
+                        "filter": {
+                            "geo_distance": {
+                                "distance": radius,
+                                "coordinates": {
+                                    "lat": latitude,
+                                    "lon": longitude
+                                }
+                            }
+                        }
+                    }
+                },
+                "sort": [
+                    {
+                        "_geo_distance": {
+                            "coordinates": {
+                                "lat": latitude,
+                                "lon": longitude
+                            },
+                            "order": "asc",
+                            "unit": "km",
+                            "mode": "min",
+                            "distance_type": "arc",
+                            "ignore_unmapped": True
+                        }
+                    }
+                ]
+            }
         )
         hits = response["hits"]["hits"]
         return list(map(itemgetter("_source"), hits))
 
     def search(self, query: dict) -> ObjectApiResponse:
         """Search for documents in the index, returning the elastic search response."""
-        return self.connection.search(index=self.index_name, query=query, size=1000)
+        return self.connection.search(index=self.index_name, body=query)
 
     def index(self, document: dict) -> None:
         """Add a document to the elasticsearch index."""

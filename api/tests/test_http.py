@@ -45,7 +45,7 @@ class TestHTTP(TestCase):
             },
         )
         self.assertEqual(response.status_code, 200)
-        self.assert_json_equal([rathausquai, seeblick], response.json())
+        self.assert_json_equal([seeblick, rathausquai], response.json())
 
         response = self.client.get(
             "/api/photos",
