@@ -8,15 +8,15 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 FROM base AS dev
 EXPOSE 3000
-CMD [ "pnpm", "run", "dev", "--host", "0.0.0.0" ]
+CMD [ "pnpm", "run", "dev", "--host", "0.0.0.0", "--port", "80" ]
 
 
 FROM base AS builder
+COPY . /app/
 RUN pnpm generate
 
 
 FROM nginx:1.27.1-alpine AS prod
-COPY ./docker/frontend.nginx.conf /etc/nginx/templates/default.conf.template
-COPY --from=builder /app/dist /usr/share/nginx/html
+COPY --from=builder /app/.output/public /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]

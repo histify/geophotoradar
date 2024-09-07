@@ -41,5 +41,8 @@ export default defineNuxtConfig({
       globPatterns: ["**/*.{js,css,html,png,svg,ico}"],
     },
   },
+  nitro: {
+    preset: "static",
+  },
   compatibilityDate: "2024-09-06",
 });

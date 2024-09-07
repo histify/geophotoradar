@@ -1,0 +1,111 @@
+services:
+  nginx:
+    image: nginx:1.27.1-alpine
+    ports:
+      - 8000:80
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/templates/default.conf.template:ro
+    environment:
+      API_HOST: api
+      FRONTEND_HOST: frontend
+    depends_on:
+      api:
+        condition: service_started
+      frontend:
+        condition: service_started
+
+  api:
+    build:
+      context: api
+      target: prod
+    ports:
+      - 8001:8000
+    environment:
+      - elastic_url=http://es01:9200
+      - elastic_password=geophotoradar
+      - api_import_token=dataimporttoken
+    depends_on:
+      es01:
+        condition: service_started
+      es02:
+        condition: service_started
+
+  frontend:
+    build:
+      context: frontend
+      target: prod
+    ports:
+      - 8002:80
+
+  es01:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.15.1
+    volumes:
+      - esdata01:/usr/share/elasticsearch/data
+    ports:
+      - 9201:9200
+    environment:
+      - node.name=es01
+      - cluster.name=docker-cluster
+      - cluster.initial_master_nodes=es01,es02
+      - discovery.seed_hosts=es02
+      - ELASTIC_PASSWORD=geophotoradar
+      - bootstrap.memory_lock=true
+      - cluster.routing.allocation.disk.threshold_enabled=false
+      - xpack.security.enabled=false
+      - xpack.security.enrollment.enabled=false
+    mem_limit: 1073741824
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+
+  es02:
+    depends_on:
+      - es01
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.15.1
+    volumes:
+      - esdata02:/usr/share/elasticsearch/data
+    environment:
+      - node.name=es02
+      - cluster.name=docker-cluster
+      - cluster.initial_master_nodes=es01,es02
+      - discovery.seed_hosts=es01
+      - bootstrap.memory_lock=true
+      - cluster.routing.allocation.disk.threshold_enabled=false
+      - xpack.security.enabled=false
+      - xpack.security.enrollment.enabled=false
+    mem_limit: 1073741824
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.15.1
+    volumes:
+      - kibanadata:/usr/share/kibana/data
+    ports:
+      - 5602:5601
+    environment:
+      - SERVERNAME=kibana
+      - ELASTICSEARCH_HOSTS=http://es01:9200
+      - ELASTICSEARCH_USERNAME=kibana_system
+      - ELASTICSEARCH_PASSWORD=geophotoradar
+    mem_limit: 1073741824
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl -s -I http://localhost:5601 | grep -q 'HTTP/1.1 302 Found'",
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 120
+
+volumes:
+  esdata01:
+    driver: local
+  esdata02:
+    driver: local
+  kibanadata:
+    driver: local
