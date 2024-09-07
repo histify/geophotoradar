@@ -1,3 +1,4 @@
 .env
 /var/
 /venv/
+/**/__pycache__

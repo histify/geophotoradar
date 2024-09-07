@@ -43,6 +43,11 @@ export default defineNuxtConfig({
   },
   nitro: {
     preset: "static",
+    devProxy: {
+      "/api/": {
+        target: `http://localhost:8000/api/`,
+      },
+    },
   },
   compatibilityDate: "2024-09-06",
 });
