@@ -44,10 +44,20 @@ class Elastic:
                         }
                     }
                 ],
+                "script_fields": {
+                    "distance_in_m": {
+                        "script": f"doc['coordinates'].arcDistance({latitude}, {longitude})"
+                    }
+                },
+                "_source": ["*"]
             }
         )
         hits = response["hits"]["hits"]
-        return list(map(itemgetter("_source"), hits))
+
+        source_fields = list(map(itemgetter("_source"), hits))
+        scripted_fields = list(map(itemgetter("fields"), hits))
+
+        return list(map(lambda thing: {**thing.get("_source"), 'distance': thing.get("fields")["distance_in_m"][0]}, hits))
 
     def search(self, query: dict) -> ObjectApiResponse:
         """Search for documents in the index, returning the elastic search response."""

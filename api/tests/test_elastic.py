@@ -23,6 +23,9 @@ class TestElastic(TestCase):
                 "iiif_url": "https://zentralgut.ch/api/v1/records/BibZug_TD_23_01705/files/images/TD_23_01705.jpg",
             },
         )
+
+        temp = self.elastic.search_documents(11.5751872644, 48.1285358227, "1km")
+
         self.assertEqual(
             ["Fraunhofer Apotheke"],
             list(map(itemgetter("title"), self.elastic.search_documents(11.5751872644, 48.1285358227, "1km"))),

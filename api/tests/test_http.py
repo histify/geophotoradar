@@ -20,6 +20,7 @@ class TestHTTP(TestCase):
         rathausquai = {
             "title": "Der Überschwemmte Rathausquai der Stadt Luzern",
             "image_url": "https://zentralgut.ch/content/BibZug_TD_23_01990/800/0/TD_23_01990.jpg",
+            "distance": 19772.436877448166,
             "id": "BibZug_TD_23_01990",
             "coordinates": {"type": "Point", "coordinates": [8.30707289986, 47.0519806883]},
             "zentralgut_url": "https://n2t.net/ark:/63274/bz1rb4r",
@@ -28,6 +29,7 @@ class TestHTTP(TestCase):
         seeblick = {
             "title": "Villa Seeblick",
             "image_url": "https://zentralgut.ch/content/BibZug_TD_23_02548/800/0/TD_23_02548.jpg",
+            "distance": 0.0,
             "id": "BibZug_TD_23_02548",
             "coordinates": {"type": "Point", "coordinates": [8.513045174201151, 47.16136672113505]},
             "zentralgut_url": "https://n2t.net/ark:/63274/bz1s18b",
