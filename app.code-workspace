@@ -9,6 +9,10 @@
       "path": "frontend"
     },
     {
+      "name": "nginx",
+      "path": "nginx"
+    },
+    {
       "name": "root",
       "path": "."
     },
@@ -17,6 +21,7 @@
     "files.exclude": {
       "api": true,
       "frontend": true,
+      "nginx": true,
     }
   }
 }
