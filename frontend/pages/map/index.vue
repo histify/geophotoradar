@@ -15,14 +15,14 @@ const router = useRouter();
 const pinIcon = L.icon({
   iconUrl: pinIconPath,
   iconSize: [38, 38],
-  iconAnchor: [0, 38],
+  iconAnchor: [19, 19],
   popupAnchor: [19, -38],
 });
 
 const meIcon = L.icon({
   iconUrl: meIconPath,
   iconSize: [38, 38],
-  iconAnchor: [0, 38],
+  iconAnchor: [19, 19],
   popupAnchor: [19, -38],
 });
 
