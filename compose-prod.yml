@@ -15,6 +15,7 @@ services:
         condition: service_started
 
   api:
+    image: ghcr.io/histify/geophotoradar/api:main
     build:
       context: api
       target: prod
@@ -31,6 +32,7 @@ services:
         condition: service_started
 
   frontend:
+    image: ghcr.io/histify/geophotoradar/frontend:main
     build:
       context: frontend
       target: prod
