@@ -59,6 +59,7 @@ class Elastic:
                 },
             )
     def import_records(self, records: List[Record]) -> str:
+        self.create_index()
         success, failed = 0, 0
         for ok, action in streaming_bulk(
                 client=self.connection, index=self.index_name, actions=self.generate_actions(records),
