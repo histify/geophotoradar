@@ -1,8 +1,13 @@
+from fastapi import Depends
 from fastapi import FastAPI
 from fastapi import File
+from fastapi import HTTPException
 from fastapi import Query
+from fastapi import status
 from fastapi import UploadFile
 from fastapi.responses import RedirectResponse
+from fastapi.security import HTTPAuthorizationCredentials
+from fastapi.security import HTTPBearer
 
 from app.elastic import Elastic
 from app.settings import settings
@@ -11,9 +16,17 @@ from app.settings import settings
 app = FastAPI(
     debug=settings.fastapi_debug,
     title="GeoPhotoRadar API",
+    version="1.0.0",
     docs_url="/api/docs",
     redoc_url="/api/redoc",
 )
+
+
+async def verify_token(credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer())):
+    if credentials.credentials != settings.api_import_token:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid or expired token", headers={"WWW-Authenticate": "Bearer"}
+        )
 
 
 @app.get("/api", include_in_schema=False)
@@ -35,5 +48,5 @@ async def photos(longitude: float = Query(...), latitude: float = Query(...), ra
 
 
 @app.post("/api/import")
-async def import_data(file: UploadFile = File(...)):
+async def import_data(file: UploadFile = File(...), token: HTTPAuthorizationCredentials = Depends(verify_token)):
     return file.filename
