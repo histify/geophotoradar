@@ -1,7 +1,22 @@
 # Geo Photo Radar
 
+## Load data with curl
 
-## Set up local directories for docker-composer
+Sample data is in the `data` folder
+
+To load it, you can use http://localhost:8000/api/docs or with curl in the `data` folder
+```
+curl -X 'POST' \
+  'http://localhost:8000/api/import' \
+  -H 'accept: application/json' \
+  -H 'Authorization: Bearer dataimporttoken' \
+  -H 'Content-Type: multipart/form-data' \
+  -F 'file=@bibzug_glasplatten_adapted.csv;type=text/csv'
+```
+
+
+
+## Set up local directories for docker-compose and elastic kiban
 
 Do this in app root folder :
 ```
