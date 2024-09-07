@@ -28,35 +28,22 @@ class Elastic:
                 "size": 1000,
                 "query": {
                     "bool": {
-                        "must": {
-                            "match_all": {}
-                        },
-                        "filter": {
-                            "geo_distance": {
-                                "distance": radius,
-                                "coordinates": {
-                                    "lat": latitude,
-                                    "lon": longitude
-                                }
-                            }
-                        }
+                        "must": {"match_all": {}},
+                        "filter": {"geo_distance": {"distance": radius, "coordinates": {"lat": latitude, "lon": longitude}}},
                     }
                 },
                 "sort": [
                     {
                         "_geo_distance": {
-                            "coordinates": {
-                                "lat": latitude,
-                                "lon": longitude
-                            },
+                            "coordinates": {"lat": latitude, "lon": longitude},
                             "order": "asc",
                             "unit": "km",
                             "mode": "min",
                             "distance_type": "arc",
-                            "ignore_unmapped": True
+                            "ignore_unmapped": True,
                         }
                     }
-                ]
+                ],
             }
         )
         hits = response["hits"]["hits"]
