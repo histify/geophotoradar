@@ -24,8 +24,6 @@ class TestElastic(TestCase):
             },
         )
 
-        temp = self.elastic.search_documents(11.5751872644, 48.1285358227, "1km")
-
         self.assertEqual(
             ["Fraunhofer Apotheke"],
             list(map(itemgetter("title"), self.elastic.search_documents(11.5751872644, 48.1285358227, "1km"))),
