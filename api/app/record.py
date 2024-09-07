@@ -1,13 +1,13 @@
 class Record:
     def __init__(
-            self,
-            id: str,
-            title: str,
-            image_url: str,
-            lat: float,
-            lon: float,
-            iiif_url: str,
-            source_system_url: str,
+        self,
+        id: str,
+        title: str,
+        image_url: str,
+        lat: float,
+        lon: float,
+        iiif_url: str,
+        source_system_url: str,
     ):
         self.id = id
         self.title = title
@@ -23,10 +23,7 @@ class Record:
             "id": self.id,
             "title": self.title,
             "image_url": self.image_url,
-            "coordinates": {
-                "lat": self.lat,
-                "lon": self.lon
-            },
+            "coordinates": {"lat": self.lat, "lon": self.lon},
             "iiif_url": self.iiif_url,
             "source_system_url": self.source_system_url,
         }

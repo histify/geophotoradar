@@ -23,6 +23,7 @@ app = FastAPI(
     version="1.0.0",
     docs_url="/api/docs",
     redoc_url="/api/redoc",
+    openapi_url="/api/openapi.json",
 )
 
 
@@ -56,7 +57,7 @@ async def import_data(file: UploadFile = File(...), token: HTTPAuthorizationCred
     content = await file.read()
 
     # Decode the content and use StringIO to emulate a file-like object
-    csv_content = content.decode('utf-8')
+    csv_content = content.decode("utf-8")
     csv_reader = csv.DictReader(StringIO(csv_content))
 
     importer = Importer()

@@ -1,19 +1,42 @@
 services:
+  nginx:
+    image: nginx:1.27.1-alpine
+    ports:
+      - 8000:80
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/templates/default.conf.template:ro
+    environment:
+      API_HOST: api
+      FRONTEND_HOST: frontend
+    depends_on:
+      api:
+        condition: service_started
+      frontend:
+        condition: service_started
+
   api:
     build:
       context: api
       target: dev
     ports:
-      - 8000:8000
+      - 8001:8000
     volumes:
       - ./api/app/:/app/app/
+    depends_on:
+      es01:
+        condition: service_started
+      es02:
+        condition: service_started
 
-  # frontend:
-  #   build: ./frontend/Dockerfile
-
-  #import:
-  #  build: ./import/Dockerfile
-
+  frontend:
+    build:
+      context: frontend
+      target: dev
+    ports:
+      - 8002:3000
+    volumes:
+      - ./frontend/:/app/
+      - /app/node_modules
 
   es01:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.15.1
@@ -37,7 +60,6 @@ services:
         soft: -1
         hard: -1
 
-
   es02:
     depends_on:
       - es01
@@ -58,8 +80,6 @@ services:
       memlock:
         soft: -1
         hard: -1
-
-
 
   kibana:
     image: docker.elastic.co/kibana/kibana:8.15.1

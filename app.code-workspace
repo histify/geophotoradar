@@ -5,16 +5,12 @@
       "path": "api"
     },
     {
-      "name": "db",
-      "path": "db"
-    },
-    {
       "name": "frontend",
       "path": "frontend"
     },
     {
-      "name": "import",
-      "path": "import"
+      "name": "nginx",
+      "path": "nginx"
     },
     {
       "name": "root",
@@ -24,9 +20,8 @@
   "settings": {
     "files.exclude": {
       "api": true,
-      "db": true,
       "frontend": true,
-      "import": true,
+      "nginx": true,
     }
   }
 }
