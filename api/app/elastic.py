@@ -1,4 +1,3 @@
-from operator import itemgetter
 from typing import List
 
 from elastic_transport import ObjectApiResponse
