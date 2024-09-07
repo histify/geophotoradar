@@ -23,7 +23,7 @@ class Record:
             "id": self.id,
             "title": self.title,
             "image_url": self.image_url,
-            "location": {
+            "coordinates": {
                 "lat": self.lat,
                 "lon": self.lon
             },
