@@ -4,6 +4,7 @@ RUN --mount=type=cache,id=poetry-pip,target=/root/.cache \
     python -m pip install --no-cache-dir poetry
 COPY poetry.lock pyproject.toml /app/
 RUN --mount=type=cache,id=poetry,target=/root/.cache \
+    poetry self add poetry-plugin-export && \
     poetry lock && \
     poetry export -o requirements.txt && \
     poetry export -o requirements-test.txt --only test && \
